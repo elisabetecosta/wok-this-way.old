@@ -1,28 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Buffet</title>
-</head>
-<body>
+<%- layout('layouts/boilerplate') -%>
 
-    <form action="/buffets" method="post">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="buffet[title]">
+    <div class="row">
+        <h1 class="text-center">New Buffet</h1>
+
+        <div class="col-6 offset-3">
+            <form action="/buffets" method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="buffet[title]">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="buffet[location]">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" id="image" name="buffet[image]">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="price">Buffet Price</label>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="price" name="buffet[price]" placeholder="0"
+                            aria-label="price" aria-describedby="price-label">
+                        <span class="input-group-text" id="price-label">€</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="buffet[description]"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-success">Add Buffet</button>
+                </div>
+            </form>
+
+            <a href="/buffets">All Buffets</a>
         </div>
-
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="buffet[location]">
-        </div>
-
-        <button>Add Buffet</button>
-    </form>
-
-    <a href="/buffets">All Buffets</a>
-
-</body>
-</html>
+    </div>

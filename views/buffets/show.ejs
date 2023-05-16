@@ -1,25 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show</title>
-</head>
-<body>
-    <h1><%= buffet.title %></h1>
-    <h2><%= buffet.location %></h2>
+<%- layout('layouts/boilerplate') -%>
 
-    <p><a href="/buffets/<%= buffet._id %>/edit">Edit</a></p>
 
-    <p>
-        <form action="/buffets/<%= buffet._id %>?_method=DELETE" method="post">
-            <button>Delete</button>
-        </form>
-    </p>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card mb-5">
 
-    <footer>
-        <a href="/buffets">All Buffets</a>
-    </footer>
-</body>
-</html>
+                <img class="card-img-top" src="<%= buffet.image %>" alt="">
+
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <%= buffet.title %>
+                    </h5>
+
+                    <p class="list-group-item card-text">
+                        <%= buffet.description %>
+                    </p>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-secondary fw-bold">
+                        <%= buffet.location %>
+                    </li>
+
+
+                    <li class="list-group-item">
+                        <%= buffet.price %>
+                    </li>
+                </ul>
+
+                <div class="card-body">
+                    <a class="card-link btn btn-info" href="/buffets/<%= buffet._id %>/edit">Edit</a>
+                    <form class="d-inline" action="/buffets/<%= buffet._id %>?_method=DELETE" method="post">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

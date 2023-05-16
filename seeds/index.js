@@ -31,9 +31,14 @@ const seedDB = async () => {
 
         const randomIndex = Math.floor(Math.random() * 5)
 
+        const price = Math.floor(Math.random() * 5)
+
         const buffet = new Buffet({
             location: `${cities[randomIndex].city}, ${cities[randomIndex].district}`,
-            title: `${sample(places)}`
+            title: `${sample(places)}`,
+            image: 'https://source.unsplash.com/collection/483251',
+            description: 'This is a random description of a random chinese restaurant that will later be changed.',
+            price: `${price} €`
         })
 
         await buffet.save()
