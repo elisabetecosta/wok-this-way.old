@@ -9,6 +9,10 @@
 <body>
     <h1>All Buffets</h1>
 
+    <div>
+        <a href="/buffets/new">Add Buffet</a>
+    </div>
+
     <ul>
         <% buffets.forEach((buffet) => { %>
             <li><a href="/buffets/<%= buffet._id %>"><%= buffet.title %></a></li>

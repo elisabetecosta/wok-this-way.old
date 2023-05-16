@@ -3,9 +3,9 @@
 
 // Imports required modules
 const express = require('express')
-const bodyParser = require('body-parser')
 const path = require('path')
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 const Buffet = require('./models/buffet')
 
 
@@ -28,8 +28,11 @@ const app = express()
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
-// Enables the use of the body-parser middleware to parse incoming requests
-app.use(bodyParser.urlencoded({ extended: true }))
+// Parses incoming requests
+app.use(express.urlencoded({ extended: true }))
+
+// Allows method overriding by adding the query string "?_method=METHOD" to the end of a URI
+app.use(methodOverride('_method'))
 
 // Serves static files in the public directory
 app.use(express.static('public'))
@@ -57,11 +60,52 @@ app.get('/buffets', async (req, res) => {
 })
 
 
+// 
+app.get('/buffets/new', async (req, res) => {
+
+    res.render('buffets/new')
+})
+
+
+app.post('/buffets', async (req, res) => {
+
+    const buffet = new Buffet(req.body.buffet)
+    await buffet.save()
+    res.redirect(`/buffets/${buffet._id}`)
+})
+
+
 //
 app.get('/buffets/:id', async (req, res) => {
 
     const buffet = await Buffet.findById(req.params.id)
     res.render('buffets/show', { buffet })
+})
+
+
+//
+app.get('/buffets/:id/edit', async (req, res) => {
+
+    const buffet = await Buffet.findById(req.params.id)
+    res.render('buffets/edit', { buffet })
+})
+
+
+// Handles the updating of buffets
+app.put('/buffets/:id', async (req, res) => {
+
+    const { id } = req.params
+    const buffet = await Buffet.findByIdAndUpdate(id, { ...req.body.buffet })
+    res.redirect(`/buffets/${buffet._id}`)
+})
+
+
+// Handles the deleting of buffets
+app.delete('/buffets/:id', async (req, res) => {
+
+    const { id } = req.params
+    await Buffet.findByIdAndDelete(id)
+    res.redirect('/buffets')
 })
 
 

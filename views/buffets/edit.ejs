@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Buffet</title>
+</head>
+<body>
+
+    <h1>Edit Buffet</h1>
+
+    <form action="/buffets/<%= buffet._id %>?_method=PUT" method="post">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="buffet[title]" value="<%= buffet.title %>">
+        </div>
+
+        <div>
+            <label for="location">Location</label>
+            <input type="text" id="location" name="buffet[location]" value="<%= buffet.location %>">
+        </div>
+
+        <button>Update Buffet</button>
+    </form>
+
+    <a href="/buffets/<%= buffet._id %>">Back To Buffet</a>
+
+</body>
+</html>
