@@ -4,22 +4,22 @@
         <h1 class="text-center">Edit Buffet</h1>
 
         <div class="col-6 offset-3">
-            <form action="/buffets/<%= buffet._id %>?_method=PUT" method="post">
+            <form action="/buffets/<%= buffet._id %>?_method=PUT" method="post" novalidate class="needs-validation">
                 
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="buffet[title]" value="<%= buffet.title %>">
+                    <input class="form-control" type="text" id="title" name="buffet[title]" value="<%= buffet.title %>" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
                     <input class="form-control" type="text" id="location" name="buffet[location]"
-                        value="<%= buffet.location %>">
+                        value="<%= buffet.location %>" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" id="image" name="buffet[image]" value="<%= buffet.image %>">
+                    <input class="form-control" type="text" id="image" name="buffet[image]" value="<%= buffet.image %>" required>
                 </div>
 
                 <div class="mb-3">
@@ -27,7 +27,7 @@
 
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="price" name="buffet[price]" placeholder="0"
-                            aria-label="price" aria-describedby="price-label" value="<%= buffet.price %>">
+                            aria-label="price" aria-describedby="price-label" value="<%= buffet.price %>" required>
                         <span class="input-group-text" id="price-label">€</span>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
                     <textarea class="form-control" type="text" id="description"
-                        name="buffet[description]"><%= buffet.description %></textarea>
+                        name="buffet[description]" required><%= buffet.description %></textarea>
                 </div>
 
                 <div class="mb-3">

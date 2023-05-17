@@ -4,20 +4,23 @@
         <h1 class="text-center">New Buffet</h1>
 
         <div class="col-6 offset-3">
-            <form action="/buffets" method="post">
+            <form action="/buffets" method="post" novalidate class="needs-validation">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="buffet[title]">
+                    <input class="form-control" type="text" id="title" name="buffet[title]" required>
+                    <div class="invalid-feedback">
+                        This field is required!
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="buffet[location]">
+                    <input class="form-control" type="text" id="location" name="buffet[location]" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" id="image" name="buffet[image]">
+                    <input class="form-control" type="text" id="image" name="buffet[image]" required>
                 </div>
 
                 <div class="mb-3">
@@ -25,14 +28,15 @@
 
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="price" name="buffet[price]" placeholder="0"
-                            aria-label="price" aria-describedby="price-label">
+                            aria-label="price" aria-describedby="price-label" required>
                         <span class="input-group-text" id="price-label">€</span>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="buffet[description]"></textarea>
+                    <textarea class="form-control" type="text" id="description" name="buffet[description]"
+                        required></textarea>
                 </div>
 
                 <div class="mb-3">

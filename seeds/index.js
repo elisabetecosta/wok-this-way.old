@@ -21,12 +21,9 @@ mongoose.connection.once('open', () => console.log('Database connected'))
 
 
 
-const sample = array => array[Math.floor(Math.random() * array.length)]
+// FIXME https://thomasventurini.com/articles/the-best-way-to-work-with-todos-in-vscode/
 
-
-const seedDB = async () => {
-    await Buffet.deleteMany({})
-
+// TODO Comment the code below once I finish the project and before deployment
     for (let i = 0; i < 5; i++) {
 
         const randomIndex = Math.floor(Math.random() * 5)
@@ -38,7 +35,7 @@ const seedDB = async () => {
             title: `${sample(places)}`,
             image: 'https://source.unsplash.com/collection/483251',
             description: 'This is a random description of a random chinese restaurant that will later be changed.',
-            price: `${price} €`
+            price: price
         })
 
         await buffet.save()
