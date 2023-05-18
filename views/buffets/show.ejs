@@ -2,7 +2,9 @@
 
 
     <div class="row">
-        <div class="col-6 offset-3">
+
+        <!-- Buffet Details Column -->
+        <div class="col-6">
             <div class="card mb-5">
 
                 <img class="card-img-top" src="<%= buffet.image %>" alt="">
@@ -12,7 +14,7 @@
                         <%= buffet.title %>
                     </h5>
 
-                    <p class="list-group-item card-text">
+                    <p class="card-text">
                         <%= buffet.description %>
                     </p>
                 </div>
@@ -22,7 +24,6 @@
                         <%= buffet.location %>
                     </li>
 
-
                     <li class="list-group-item">
                         <%= buffet.price %> €
                     </li>
@@ -30,10 +31,53 @@
 
                 <div class="card-body">
                     <a class="card-link btn btn-info" href="/buffets/<%= buffet._id %>/edit">Edit</a>
+
                     <form class="d-inline" action="/buffets/<%= buffet._id %>?_method=DELETE" method="post">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 </div>
+
             </div>
+        </div>
+
+
+        <!-- Reviews Column -->
+        <div class="col-6">
+            <h2>Leave a Review</h2>
+
+            <form action="/buffets/<%= buffet._id %>/reviews" method="post" class="mb-3 needs-validation" novalidate>
+
+                <div class="mb-3">
+                    <label class="form-label" for="rating">Rating</label>
+                    <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="body">Review</label>
+                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+                    <div class="invalid-feedback">
+                        You cannot submit an empty review!
+                    </div>
+                </div>
+
+                <button class="btn btn-success">Submit</button>
+
+            </form>
+
+
+            <% buffet.reviews.forEach((review)=> { %>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Rating: <%= review.rating %></h5>
+                        <p class="card-text">Review: <%= review.body %></p>
+                        <form class="d-inline" action="/buffets/<%= buffet._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+
+            <% }) %>
+
         </div>
     </div>
