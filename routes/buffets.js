@@ -4,7 +4,8 @@ const router = express.Router()
 
 const Buffet = require('../models/buffet')
 
-const {buffetSchema} = require('../schemas')
+const { buffetSchema } = require('../schemas')
+const { isLoggedIn } = require('../middleware')
 
 const catchAsync = require('../utils/catchAsync')
 const ExpressError = require('../utils/ExpressError')
@@ -15,8 +16,8 @@ const ExpressError = require('../utils/ExpressError')
 const validateBuffet = (req, res, next) => {
 
     // Validates the request body against the buffetSchema
-    const {error} = buffetSchema.validate(req.body)
-    
+    const { error } = buffetSchema.validate(req.body)
+
     if (error) {
 
         // If a validation error occurs, constructs an error message
@@ -45,7 +46,7 @@ router.get('/', catchAsync(async (req, res) => {
 
 
 // Handles GET request for the /buffets/new route
-router.get('/new', catchAsync(async (req, res) => {
+router.get('/new', isLoggedIn, catchAsync(async (req, res) => {
 
     // Renders the 'buffets/new' view
     res.render('buffets/new')
@@ -53,7 +54,7 @@ router.get('/new', catchAsync(async (req, res) => {
 
 
 // Handles POST request for the /buffets route, validating the data before processing further
-router.post('/', validateBuffet, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, validateBuffet, catchAsync(async (req, res) => {
 
     // Creates a new buffet instance with the data from the request body
     const buffet = new Buffet(req.body.buffet)
@@ -91,7 +92,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 
 
 // Handles GET request for the '/buffets/:id/edit' route
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
 
     // Retrieves the buffet from the database based on the provided ID
     const buffet = await Buffet.findById(req.params.id)
@@ -112,7 +113,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 
 
 // Handles PUT request for the '/buffets/:id' route, validating the data before processing further
-router.put('/:id', validateBuffet, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validateBuffet, catchAsync(async (req, res) => {
 
     // Destructures the 'id' property from the request parameters
     const { id } = req.params
@@ -129,7 +130,7 @@ router.put('/:id', validateBuffet, catchAsync(async (req, res) => {
 
 
 // Handles DELETE request for the '/buffets/:id' route
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
 
     // Destructures the 'id' property from the request parameters
     const { id } = req.params

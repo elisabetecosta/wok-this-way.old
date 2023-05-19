@@ -10,8 +10,13 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpressError')
-const buffets = require('./routes/buffets')
-const reviews = require('./routes/reviews')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require('./models/user')
+
+const userRoutes = require('./routes/users')
+const buffetRoutes = require('./routes/buffets')
+const reviewRoutes = require('./routes/reviews')
 
 
 
@@ -65,6 +70,27 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
+
+// Initializes passport
+app.use(passport.initialize())
+
+// Enables persistent login sessions
+app.use(passport.session())
+
+// TODO change code below to implement google auth based on the secrets project
+//============================================
+
+// Configures passport for local authentication strategy
+passport.use(new LocalStrategy(User.authenticate()))
+
+// Serializes user into the session
+passport.serializeUser(User.serializeUser());
+
+// Deserializes user from the session
+passport.deserializeUser(User.deserializeUser());
+//============================================
+
+
 // Middleware to set local variables for flash messages
 app.use((req, res, next) => {
     res.locals.success = req.flash('success')
@@ -74,12 +100,26 @@ app.use((req, res, next) => {
 
 
 // Sets up the router middlewares for buffets and reviews 
-app.use('/buffets', buffets)
-app.use('/buffets/:id/reviews', reviews)
+app.use('/', userRoutes)
+app.use('/buffets', buffetRoutes)
+app.use('/buffets/:id/reviews', reviewRoutes)
 
 
 
 // Defines routes for the application
+
+
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({
+        email:'123@gmail.com',
+        username: 'admin'
+    })
+
+    const newUser = await User.register(user, 'password')
+
+    res.send(newUser)
+})
+
 
 // Handles GET request for the root route ('/')
 app.get('/', (req, res) => {
