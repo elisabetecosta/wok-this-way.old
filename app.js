@@ -6,12 +6,12 @@ const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
 const ejsMate = require('ejs-mate')
+const session = require('express-session')
+const flash = require('connect-flash')
 const methodOverride = require('method-override')
-const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
-const {buffetSchema, reviewSchema} = require('./schemas')
-const Buffet = require('./models/buffet')
-const Review = require('./models/review')
+const buffets = require('./routes/buffets')
+const reviews = require('./routes/reviews')
 
 
 
@@ -26,9 +26,9 @@ mongoose.connection.on('error', console.error.bind(console, 'connection error'))
 mongoose.connection.once('open', () => console.log('Database connected'))
 
 
+
 // Creates an Express application
 const app = express()
-
 
 // Sets the EJS template engine for rendering views
 app.engine('ejs', ejsMate)
@@ -39,7 +39,6 @@ app.set('view engine', 'ejs')
 // Set the directory for the views
 app.set('views', path.join(__dirname, 'views'))
 
-
 // Parses URL-encoded bodies for form submission
 app.use(express.urlencoded({ extended: true }))
 
@@ -47,48 +46,40 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 // Serves static files in the public directory
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 
-// Validates buffet data
-const validateBuffet = (req, res, next) => {
-
-    // Validates the request body against the buffetSchema
-    const {error} = buffetSchema.validate(req.body)
-    
-    if (error) {
-
-        // If a validation error occurs, constructs an error message
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(400, msg)
-    } else {
-
-        // If validation succeeds, moves to the next middleware
-        next()
+// Configures session middleware
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
     }
 }
 
-// Validates review data
-const validateReview = (req, res, next) => {
+// Mounts session and flash middlewares
+app.use(session(sessionConfig))
+app.use(flash())
 
-    // Validates the request body against the reviewSchema
-    const {error} = reviewSchema.validate(req.body)
-    
-    if (error) {
+// Middleware to set local variables for flash messages
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    next()
+})
 
-        // If a validation error occurs, constructs an error message
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(400, msg)
-    } else {
 
-        // If validation succeeds, moves to the next middleware
-        next()
-    }
-}
+// Sets up the router middlewares for buffets and reviews 
+app.use('/buffets', buffets)
+app.use('/buffets/:id/reviews', reviews)
 
 
 
-// Defines the routes for the application
+// Defines routes for the application
 
 // Handles GET request for the root route ('/')
 app.get('/', (req, res) => {
@@ -96,128 +87,6 @@ app.get('/', (req, res) => {
     // Renders the 'home' view
     res.render('home')
 })
-
-
-// Handles GET request for the /buffets route
-app.get('/buffets', catchAsync(async (req, res) => {
-
-    // Retrieves all buffets from the database
-    const buffets = await Buffet.find({})
-
-    // Renders the 'buffets/index' view and passes the retrieved buffets as data
-    res.render('buffets/index', { buffets })
-}))
-
-
-// Handles GET request for the /buffets/new route
-app.get('/buffets/new', catchAsync(async (req, res) => {
-
-    // Renders the 'buffets/new' view
-    res.render('buffets/new')
-}))
-
-
-// Handles POST request for the /buffets route, validating the data before processing further
-app.post('/buffets', validateBuffet, catchAsync(async (req, res) => {
-
-    // Creates a new buffet instance with the data from the request body
-    const buffet = new Buffet(req.body.buffet)
-
-    // Saves the buffet to the database
-    await buffet.save()
-
-    // Redirects the user to the details page of the newly created buffet
-    res.redirect(`/buffets/${buffet._id}`)
-}))
-
-
-// Handles GET request for the '/buffets/:id' route
-app.get('/buffets/:id', catchAsync(async (req, res) => {
-
-    // Retrieves the buffet from the database based on the provided ID and populates its 'reviews' field
-    const buffet = await Buffet.findById(req.params.id).populate('reviews')
-
-    // Renders the 'buffets/show' view and passes the retrieved buffet as data
-    res.render('buffets/show', { buffet })
-}))
-
-
-// Handles GET request for the '/buffets/:id/edit' route
-app.get('/buffets/:id/edit', catchAsync(async (req, res) => {
-
-    // Retrieves the buffet from the database based on the provided ID
-    const buffet = await Buffet.findById(req.params.id)
-
-    // Renders the 'buffets/edit' view and passes the retrieved buffet as data
-    res.render('buffets/edit', { buffet })
-}))
-
-
-// Handles PUT request for the '/buffets/:id' route, validating the data before processing further
-app.put('/buffets/:id', validateBuffet, catchAsync(async (req, res) => {
-
-    // Destructures the 'id' property from the request parameters
-    const { id } = req.params
-
-    // Updates the buffet in the database based on the provided ID with the data from the request body
-    const buffet = await Buffet.findByIdAndUpdate(id, { ...req.body.buffet })
-
-    // Redirects the user to the details page of the updated buffet
-    res.redirect(`/buffets/${buffet._id}`)
-}))
-
-
-// Handles DELETE request for the '/buffets/:id' route
-app.delete('/buffets/:id', catchAsync(async (req, res) => {
-
-    // Destructures the 'id' property from the request parameters
-    const { id } = req.params
-
-    // Deletes the buffet from the database based on the provided ID
-    await Buffet.findByIdAndDelete(id)
-
-    // Redirects the user to the '/buffets' route
-    res.redirect('/buffets')
-}))
-
-
-// Handles POST request for the '/buffets/:id/reviews' route, validating the data before processing further
-app.post('/buffets/:id/reviews', validateReview, catchAsync(async (req, res) => {
-    
-    // Finds the buffet by ID
-    const buffet = await Buffet.findById(req.params.id)
-
-    // Creates a new Review instance using the review data from the request body
-    const review = new Review(req.body.review)
-
-    // Pushes the new review into the 'reviews' array of the buffet
-    buffet.reviews.push(review)
-
-    // Saves the new review and the buffet to the database
-    await review.save()
-    await buffet.save()
-
-    // Redirects the user to the details page of the buffet
-    res.redirect(`/buffets/${buffet._id}`)
-}))
-
-
-// Handles DELETE request for the '/buffets/:id/reviews/:reviewId' route
-app.delete('/buffets/:id/reviews/:reviewId', catchAsync(async (req, res) => {
-
-        // Destructures the 'id' and 'reviewId' properties from the request parameters
-        const { id, reviewId } = req.params
-
-        // Removes the review ID from the reviews array of the buffet using the '$pull' operator
-        await Buffet.findByIdAndUpdate(id, {$pull: {reviews: reviewId}})
-    
-        // Deletes the review from the database based on the provided ID
-        await Review.findByIdAndDelete(reviewId)
-    
-        // Redirects the user to the details page of the buffet
-        res.redirect(`/buffets/${id}`)
-}))
-
 
 
 // Handles all routes that are not matched by previous route handlers
