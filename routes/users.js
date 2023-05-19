@@ -19,14 +19,20 @@ router.post('/register', catchAsync(async (req, res) => {
         const user = new User({ email, username })
 
         const registeredUser = await User.register(user, password)
-        console.log(registeredUser)
+        
+        req.login(registeredUser, (err) => {
 
-        req.flash('success', 'Welcome to Wok This Way!')
-        res.redirect('/buffets')
+            if (err) return next(err)
+
+            req.flash('success', `Welcome to Wok This Way, ${username}!`)
+
+            res.redirect('/buffets')
+        })
 
     } catch (e) {
 
         req.flash('error', e.message)
+
         res.redirect('/register')
     }
 }))
@@ -40,9 +46,12 @@ router.get('/login', (req, res) => {
 
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
 
-    const username = req.body.username
-    req.flash('success', `Welcome back, ${username}!`)
-    res.redirect('/buffets')
+    req.flash('success', `Welcome back, ${req.user.username}!`)
+
+    const redirectUrl = req.session.returnTo || '/buffets'
+    delete req.session.returnTo
+
+    res.redirect(redirectUrl)
 })
 
 
@@ -51,6 +60,7 @@ router.get('/logout', (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/buffets')
 
     req.logout((err) => {
+
         if (err) return next(err)
 
         req.flash('success', 'You have successfully signed out!')
