@@ -5,43 +5,24 @@ const router = express.Router({ mergeParams: true }) // the 'mergeParams' option
 const Buffet = require('../models/buffet')
 const Review = require('../models/review')
 
-const { reviewSchema } = require('../schemas')
+const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware')
 
 const catchAsync = require('../utils/catchAsync')
-const ExpressError = require('../utils/ExpressError')
-
-
-
-// Validates review data
-const validateReview = (req, res, next) => {
-
-    // Validates the request body against the reviewSchema
-    const { error } = reviewSchema.validate(req.body)
-
-    if (error) {
-
-        // If a validation error occurs, constructs an error message
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(400, msg)
-    } else {
-
-        // If validation succeeds, moves to the next middleware
-        next()
-    }
-}
 
 
 
 // Reviews route definition
 
-// Handles POST request for the '/buffets/:id/reviews' route, validating the data before processing further
-router.post('/', validateReview, catchAsync(async (req, res) => {
+// Handles POST request for the '/buffets/:id/reviews' route, checking if the user is logged in and validating the data before processing further
+router.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
 
     // Finds the buffet by ID
     const buffet = await Buffet.findById(req.params.id)
 
     // Creates a new Review instance using the review data from the request body
     const review = new Review(req.body.review)
+
+    review.author = req.user._id
 
     // Pushes the new review into the 'reviews' array of the buffet
     buffet.reviews.push(review)
@@ -59,7 +40,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
 
 
 // Handles DELETE request for the '/buffets/:id/reviews/:reviewId' route
-router.delete('/:reviewId', catchAsync(async (req, res) => {
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
 
     // Destructures the 'id' and 'reviewId' properties from the request parameters
     const { id, reviewId } = req.params

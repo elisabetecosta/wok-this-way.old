@@ -25,17 +25,23 @@
                     </li>
 
                     <li class="list-group-item">
+                        Submitted by <%= buffet.author.username %>
+                    </li>
+
+                    <li class="list-group-item">
                         <%= buffet.price %> €
                     </li>
                 </ul>
 
-                <div class="card-body">
-                    <a class="card-link btn btn-info" href="/buffets/<%= buffet._id %>/edit">Edit</a>
+                <% if (currentUser && buffet.author.equals(currentUser._id)) { %>
+                    <div class="card-body">
+                        <a class="card-link btn btn-info" href="/buffets/<%= buffet._id %>/edit">Edit</a>
 
-                    <form class="d-inline" action="/buffets/<%= buffet._id %>?_method=DELETE" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </div>
+                        <form class="d-inline" action="/buffets/<%= buffet._id %>?_method=DELETE" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                <% } %>
 
             </div>
         </div>
@@ -43,37 +49,47 @@
 
         <!-- Reviews Column -->
         <div class="col-6">
-            <h2>Leave a Review</h2>
 
-            <form action="/buffets/<%= buffet._id %>/reviews" method="post" class="mb-3 needs-validation" novalidate>
+            <% if (currentUser) { %>
+                <h2>Leave a Review</h2>
 
-                <div class="mb-3">
-                    <label class="form-label" for="rating">Rating</label>
-                    <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-                </div>
+                <form action="/buffets/<%= buffet._id %>/reviews" method="post" class="mb-3 needs-validation" novalidate>
 
-                <div class="mb-3">
-                    <label class="form-label" for="body">Review</label>
-                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
-                    <div class="invalid-feedback">
-                        You cannot submit an empty review!
+                    <div class="mb-3">
+                        <label class="form-label" for="rating">Rating</label>
+                        <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
                     </div>
-                </div>
 
-                <button class="btn btn-success">Submit</button>
+                    <div class="mb-3">
+                        <label class="form-label" for="body">Review</label>
+                        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+                        <div class="invalid-feedback">
+                            You cannot submit an empty review!
+                        </div>
+                    </div>
 
-            </form>
+                    <button class="btn btn-success">Submit</button>
 
+                </form>
+            <% } %>
 
             <% buffet.reviews.forEach((review)=> { %>
 
                 <div class="card mb-3">
                     <div class="card-body">
+
                         <h5 class="card-title fw-bold">Rating: <%= review.rating %></h5>
+
+                        <h6 class="card-subtitle mb-2 text-body-secondary">By <%= review.author.username %></h6>
+
                         <p class="card-text">Review: <%= review.body %></p>
-                        <form class="d-inline" action="/buffets/<%= buffet._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+
+                        <% if (currentUser && review.author.equals(currentUser._id)) { %>
+                            <form class="d-inline" action="/buffets/<%= buffet._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        <% } %>
+
                     </div>
                 </div>
 

@@ -4,31 +4,9 @@ const router = express.Router()
 
 const Buffet = require('../models/buffet')
 
-const { buffetSchema } = require('../schemas')
-const { isLoggedIn } = require('../middleware')
+const { isLoggedIn, validateBuffet, isAuthor } = require('../middleware')
 
 const catchAsync = require('../utils/catchAsync')
-const ExpressError = require('../utils/ExpressError')
-
-
-
-// Validates buffet data
-const validateBuffet = (req, res, next) => {
-
-    // Validates the request body against the buffetSchema
-    const { error } = buffetSchema.validate(req.body)
-
-    if (error) {
-
-        // If a validation error occurs, constructs an error message
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(400, msg)
-    } else {
-
-        // If validation succeeds, moves to the next middleware
-        next()
-    }
-}
 
 
 
@@ -59,6 +37,8 @@ router.post('/', isLoggedIn, validateBuffet, catchAsync(async (req, res) => {
     // Creates a new buffet instance with the data from the request body
     const buffet = new Buffet(req.body.buffet)
 
+    buffet.author = req.user._id
+
     // Saves the buffet to the database
     await buffet.save()
 
@@ -73,8 +53,13 @@ router.post('/', isLoggedIn, validateBuffet, catchAsync(async (req, res) => {
 // Handles GET request for the '/buffets/:id' route
 router.get('/:id', catchAsync(async (req, res) => {
 
-    // Retrieves the buffet from the database based on the provided ID and populates its 'reviews' field
-    const buffet = await Buffet.findById(req.params.id).populate('reviews')
+    // Retrieves the buffet from the database based on the provided ID and populates its 'reviews' and 'author' fields
+    const buffet = await Buffet.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        } 
+    }).populate('author')
 
     // If the buffet is not found
     if (!buffet) {
@@ -92,7 +77,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 
 
 // Handles GET request for the '/buffets/:id/edit' route
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
 
     // Retrieves the buffet from the database based on the provided ID
     const buffet = await Buffet.findById(req.params.id)
@@ -113,7 +98,7 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
 
 
 // Handles PUT request for the '/buffets/:id' route, validating the data before processing further
-router.put('/:id', isLoggedIn, validateBuffet, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateBuffet, catchAsync(async (req, res) => {
 
     // Destructures the 'id' property from the request parameters
     const { id } = req.params
@@ -130,7 +115,7 @@ router.put('/:id', isLoggedIn, validateBuffet, catchAsync(async (req, res) => {
 
 
 // Handles DELETE request for the '/buffets/:id' route
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
 
     // Destructures the 'id' property from the request parameters
     const { id } = req.params

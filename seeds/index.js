@@ -38,6 +38,7 @@ const seedDB = async () => {
         const price = Math.floor(Math.random() * 5)
 
         const buffet = new Buffet({
+            author: '6467b1c084ee408921b1bf22',
             location: `${cities[randomIndex].city}, ${cities[randomIndex].district}`,
             title: `${sample(places)}`,
             image: 'https://source.unsplash.com/collection/483251',
