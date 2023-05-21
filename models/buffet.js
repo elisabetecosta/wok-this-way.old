@@ -5,7 +5,12 @@ const Schema = mongoose.Schema
 
 const BuffetSchema = new Schema({
     title: String,
-    image: String,
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ],
     price: Number,
     description: String,
     location: String,

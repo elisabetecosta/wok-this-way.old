@@ -18,11 +18,7 @@ const catchAsync = require('../utils/catchAsync')
 // Handles GET and POST requests for the /buffets route
 router.route('/')
     .get(catchAsync(buffets.index))
-    // .post(isLoggedIn, validateBuffet, catchAsync(buffets.createBuffet))
-    .post(upload.array('image'), (req, res) => {
-        console.log(req.body, req.files)
-        res.send('It worked!')
-    })
+    .post(isLoggedIn, upload.array('image'), validateBuffet, catchAsync(buffets.createBuffet))
 
 
 // Handles GET request for the /buffets/new route
@@ -32,7 +28,7 @@ router.get('/new', isLoggedIn, buffets.renderNewForm)
 // Handles GET, PUT and DELETE requests for the '/buffets/:id' route
 router.route('/:id')
     .get(catchAsync(buffets.showBuffet))
-    .put(isLoggedIn, isAuthor, validateBuffet, catchAsync(buffets.updateBuffet))
+    .put(isLoggedIn, isAuthor, upload.array('image'), validateBuffet, catchAsync(buffets.updateBuffet))
     .delete(isLoggedIn, isAuthor, catchAsync(buffets.deleteBuffet))
 
 

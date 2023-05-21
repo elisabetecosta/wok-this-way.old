@@ -5,9 +5,36 @@
 
         <!-- Buffet Details Column -->
         <div class="col-6">
-            <div class="card mb-5">
 
-                <img class="card-img-top" src="<%= buffet.image %>" alt="">
+            <!-- Images Carousel -->
+            <div id="buffetCarousel" class="carousel slide">
+                <div class="carousel-inner">
+
+                    <% buffet.images.forEach((img, i)=> { %>
+                        <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                            <img src="<%= img.url %>" class="d-block w-100" alt="">
+                        </div>
+                    <% }) %>
+
+                </div>
+
+                <% if (buffet.images.length> 1) { %>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#buffetCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#buffetCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                <% } %>
+            </div>
+
+
+            <!-- CARD BODY -->
+            <div class="card mb-5">
 
                 <div class="card-body">
                     <h5 class="card-title fw-bold">
@@ -84,34 +111,34 @@
 
                 </form>
                 <% } %>
-                
-                <% buffet.reviews.forEach((review)=> { %>
 
-                    <div class="card mb-3">
-                        <div class="card-body">
+                    <% buffet.reviews.forEach((review)=> { %>
 
-                            <h5 class="card-title fw-bold">
-                                <%= review.author.username %>
-                            </h5>
-                            <p class="starability-result" data-rating="<%= review.rating %>">
-                                Rated: <%= review.rating %> stars
-                            </p>
+                        <div class="card mb-3">
+                            <div class="card-body">
 
-                            <p class="card-text">Review: <%= review.body %>
-                            </p>
+                                <h5 class="card-title fw-bold">
+                                    <%= review.author.username %>
+                                </h5>
+                                <p class="starability-result" data-rating="<%= review.rating %>">
+                                    Rated: <%= review.rating %> stars
+                                </p>
 
-                            <% if (currentUser && review.author.equals(currentUser._id)) { %>
-                                <form class="d-inline"
-                                    action="/buffets/<%= buffet._id %>/reviews/<%= review._id %>?_method=DELETE"
-                                    method="post">
-                                    <button class="btn btn-sm btn-danger">Delete</button>
-                                </form>
-                                <% } %>
+                                <p class="card-text">Review: <%= review.body %>
+                                </p>
 
+                                <% if (currentUser && review.author.equals(currentUser._id)) { %>
+                                    <form class="d-inline"
+                                        action="/buffets/<%= buffet._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                        method="post">
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                    <% } %>
+
+                            </div>
                         </div>
-                    </div>
 
-                <% }) %>
+                        <% }) %>
 
         </div>
     </div>

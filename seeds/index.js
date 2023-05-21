@@ -41,9 +41,18 @@ const seedDB = async () => {
             author: '6467b1c084ee408921b1bf22',
             location: `${cities[randomIndex].city}, ${cities[randomIndex].district}`,
             title: `${sample(places)}`,
-            image: 'https://source.unsplash.com/collection/483251',
             description: 'This is a random description of a random chinese restaurant that will later be changed.',
-            price: price
+            price: price,
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/dh9isfyyf/image/upload/v1684707965/Wok%20This%20Way/heuwjggiflu9angrleia.png',
+                    filename: 'Wok This Way/heuwjggiflu9angrleia'    
+                },
+                {
+                    url: 'https://res.cloudinary.com/dh9isfyyf/image/upload/v1684707966/Wok%20This%20Way/dn8xmqytxxth1nw10ojs.png',
+                    filename: 'Wok This Way/dn8xmqytxxth1nw10ojs'    
+                }
+            ]
         })
 
         await buffet.save()
