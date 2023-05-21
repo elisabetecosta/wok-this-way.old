@@ -1,6 +1,13 @@
 // Enables strict mode
 'use strict'
 
+// Checks if the current environment is not in production mode
+if (process.env.NODE_ENV !== "production") {
+
+    // Loads environment variables from a .env file
+    require('dotenv').config();
+}
+
 // Imports required modules
 const express = require('express')
 const path = require('path')

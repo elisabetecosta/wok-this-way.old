@@ -1,6 +1,9 @@
 // Imports required modules
 const express = require('express')
 const router = express.Router()
+const multer  = require('multer')
+const { storage } = require('../CloudinaryConfig')
+const upload = multer({ storage })
 
 const buffets = require('../controllers/buffets')
 
@@ -15,7 +18,11 @@ const catchAsync = require('../utils/catchAsync')
 // Handles GET and POST requests for the /buffets route
 router.route('/')
     .get(catchAsync(buffets.index))
-    .post(isLoggedIn, validateBuffet, catchAsync(buffets.createBuffet))
+    // .post(isLoggedIn, validateBuffet, catchAsync(buffets.createBuffet))
+    .post(upload.array('image'), (req, res) => {
+        console.log(req.body, req.files)
+        res.send('It worked!')
+    })
 
 
 // Handles GET request for the /buffets/new route
