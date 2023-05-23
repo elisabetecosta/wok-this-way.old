@@ -38,11 +38,15 @@ const seedDB = async () => {
         const price = Math.floor(Math.random() * 5)
 
         const buffet = new Buffet({
-            author: '6467b1c084ee408921b1bf22',
+            author: '6467b1c084ee408921b1bf22', // Admin user id
             location: `${cities[randomIndex].city}, ${cities[randomIndex].district}`,
             title: `${sample(places)}`,
             description: 'This is a random description of a random chinese restaurant that will later be changed.',
             price: price,
+            geometry: { 
+                type: 'Point', 
+                coordinates: [ -8.4102573, 40.2033145 ] 
+            },
             images: [
                 {
                     url: 'https://res.cloudinary.com/dh9isfyyf/image/upload/v1684707965/Wok%20This%20Way/heuwjggiflu9angrleia.png',
