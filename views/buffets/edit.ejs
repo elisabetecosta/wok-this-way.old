@@ -42,7 +42,7 @@
 
                 <div class="mb-3">
                     <% buffet.images.forEach((img, i) => { %>
-                        <img src="<%= img.url %>" class="img-thumbnail" alt="">
+                        <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
     
                         <div class="form-check form-check-inline">
                             <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%= img.filename %>">

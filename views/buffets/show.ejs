@@ -14,7 +14,7 @@
                         <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
                             <img src="<%= img.url %>" class="d-block w-100" alt="">
                         </div>
-                    <% }) %>
+                        <% }) %>
 
                 </div>
 
@@ -29,7 +29,7 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
-                <% } %>
+                    <% } %>
             </div>
 
 
@@ -73,10 +73,13 @@
             </div>
         </div>
 
-
-        <!-- Reviews Column -->
+        <!-- Map & Reviews Column -->
         <div class="col-6">
 
+            <!-- MAP -->
+            <div id="map"></div>
+
+            <!-- REVIEWS -->
             <% if (currentUser) { %>
                 <h2 class="mb-3">Leave a Review</h2>
 
@@ -138,7 +141,16 @@
                             </div>
                         </div>
 
-                        <% }) %>
+                    <% }) %>
 
         </div>
     </div>
+
+    <!-- SCRIPTS TO LOAD MAP -->
+    <script>
+        const longitude = <%= buffet.geometry.coordinates[0] %>
+        const latitude = <%= buffet.geometry.coordinates[1] %>
+    </script>
+
+    <script async src="/js/showPageMap.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=<%=process.env.MAPS_API_KEY%>&callback=initMap"></script>

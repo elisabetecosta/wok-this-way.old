@@ -1,5 +1,20 @@
 // TODO add missing comments
 const Buffet = require('../models/buffet')
+const { cloudinary } = require('../CloudinaryConfig')
+
+
+const NodeGeocoder = require('node-geocoder');
+
+const options = {
+    provider: 'google',
+    httpAdapter: 'https',
+    apiKey: process.env.GEOCODER_API_KEY,
+    formatter: null
+}
+
+const geocoder = NodeGeocoder(options)
+
+
 
 module.exports.index = async (req, res) => {
 
@@ -18,8 +33,19 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createBuffet = async (req, res) => {
 
+    const geoData = await geocoder.geocode(req.body.buffet.location)
+
+    const latitude = geoData[0].latitude
+    const longitude = geoData[0].longitude
+
+    // res.send(geoData.body)
+
     // Creates a new buffet instance with the data from the request body
     const buffet = new Buffet(req.body.buffet)
+
+    buffet.geometry = { "type": "Point", "coordinates": [longitude, latitude] }
+
+    buffet.location = geoData[0].formattedAddress
 
     //
     buffet.images = req.files.map(file => ({ url: file.path, filename: file.filename }))
@@ -95,6 +121,18 @@ module.exports.updateBuffet = async (req, res) => {
 
     await buffet.save()
 
+    if (req.body.deleteImages) {
+
+        for (let filename of req.body.deleteImages) {
+
+            await cloudinary.uploader.destroy(filename)
+        }
+
+        await buffet.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+
+        console.log(buffet)
+    }
+
     // Sets a success flash message
     req.flash('success', 'Successfully updated buffet!')
 
@@ -107,7 +145,16 @@ module.exports.deleteBuffet = async (req, res) => {
     // Destructures the 'id' property from the request parameters
     const { id } = req.params
 
-    // Deletes the buffet from the database based on the provided ID
+    // 
+    const buffet = await Buffet.findById(id)
+
+    const images = buffet.images
+    const filenames = images.map((image) => image.filename)
+
+    for (let filename of filenames) {
+        await cloudinary.uploader.destroy(filename)
+    }
+
     await Buffet.findByIdAndDelete(id)
 
     // Sets a success flash message
