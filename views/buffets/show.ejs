@@ -150,6 +150,11 @@
     <script>
         const longitude = <%= buffet.geometry.coordinates[0] %>
         const latitude = <%= buffet.geometry.coordinates[1] %>
+        const contentString = `
+        <h4><%= buffet.title %></h4>
+        <h6><%= buffet.location %></h6>
+        <p><%= buffet.description %></p>
+    `
     </script>
 
     <script async src="/js/showPageMap.js"></script>

@@ -1,7 +1,10 @@
 function initMap() {
 
+    // Variables holding data from the show.ejs file
     const lng = longitude
     const lat = latitude
+    const content = contentString
+
     const center = { lat: lat, lng: lng }
 
     const map = new google.maps.Map(document.getElementById('map'), {
@@ -11,24 +14,15 @@ function initMap() {
         scrollwheel: false
     })
 
-
-    /* BREAKS THE CODE AND THE MAP WONT SHOW 
-    
-    
-    const contentString = `
-    <strong>${buffetName}<br />
-    ${buffetLocation}</strong>
-    <p>${buffetDescription}</p>
-  `
     const infowindow = new google.maps.InfoWindow({
-        content: contentString
-    }) */
+        content: content
+    })
 
     const marker = new google.maps.Marker({
         position: center,
         map: map
     })
-
+    
     marker.addListener('click', function () {
         infowindow.open(map, marker)
     })
