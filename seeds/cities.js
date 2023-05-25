@@ -29,4 +29,22 @@ module.exports = [
         longitude: -8.6167,
         district: "Porto"
     },
+    {
+        city: "Paris",
+        latitude: 48.86080,
+        longitude: 2.33947,
+        district: "Paris"
+    },
+    {
+        city: "London",
+        latitude: 51.50853,
+        longitude: -0.12500,
+        district: "London"
+    }, 
+    {
+        city: "Toronto",
+        latitude: 43.65912,
+        longitude: -79.37980,
+        district: "Toronto"
+    },
 ]

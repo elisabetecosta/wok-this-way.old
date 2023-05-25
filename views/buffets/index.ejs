@@ -1,5 +1,7 @@
 <%- layout('layouts/boilerplate') -%>
 
+    <div id="clusterMap"></div>
+
     <h1>All Buffets</h1>
 
     <div>
@@ -7,27 +9,33 @@
     </div>
 
 
-    <% buffets.forEach((buffet) => { %>
+    <% buffets.forEach((buffet)=> { %>
 
         <div class="card mb-3">
             <div class="row">
                 <div class="col-md-4">
                     <% if (buffet.images.length) { %>
                         <img class="img-fluid" src="<%= buffet.images[0].url %>" alt="">
-                    <% } else { %>
-                        <img class="img-fluid" src="https://images.unsplash.com/photo-1464500542410-1396074bf230" alt="">
-                    <% } %>
+                        <% } else { %>
+                            <img class="img-fluid" src="https://images.unsplash.com/photo-1464500542410-1396074bf230"
+                                alt="">
+                            <% } %>
                 </div>
 
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold"><%= buffet.title %></h5>
+                        <h5 class="card-title fw-bold">
+                            <%= buffet.title %>
+                        </h5>
 
-                        <p class="card-text"><%= buffet.description %>
+                        <p class="card-text">
+                            <%= buffet.description %>
                         </p>
 
                         <p class="card-text text-secondary fw-bold">
-                            <small><%= buffet.location %></small>
+                            <small>
+                                <%= buffet.location %>
+                            </small>
                         </p>
 
                         <p>
@@ -38,3 +46,15 @@
             </div>
         </div>
     <% }) %>
+
+    <script>
+
+        const mapboxToken = '<%-process.env.MAPBOX_TOKEN%>'
+        const buffets = {features: <%- JSON.stringify(buffets) %>}
+
+    </script>
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+    <script src="/js/clusterMap.js"></script>

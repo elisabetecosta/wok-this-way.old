@@ -3,7 +3,7 @@ const Buffet = require('../models/buffet')
 const { cloudinary } = require('../CloudinaryConfig')
 
 
-const NodeGeocoder = require('node-geocoder');
+const NodeGeocoder = require('node-geocoder')
 
 const options = {
     provider: 'google',
@@ -37,8 +37,6 @@ module.exports.createBuffet = async (req, res) => {
 
     const latitude = geoData[0].latitude
     const longitude = geoData[0].longitude
-
-    // res.send(geoData.body)
 
     // Creates a new buffet instance with the data from the request body
     const buffet = new Buffet(req.body.buffet)

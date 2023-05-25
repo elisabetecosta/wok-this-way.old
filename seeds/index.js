@@ -31,7 +31,7 @@ const seedDB = async () => {
 
     await Buffet.deleteMany({})
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 15; i++) {
 
         const randomIndex = Math.floor(Math.random() * 5)
 
@@ -45,7 +45,10 @@ const seedDB = async () => {
             price: price,
             geometry: { 
                 type: 'Point', 
-                coordinates: [ -8.4102573, 40.2033145 ] 
+                coordinates: [ 
+                    cities[randomIndex].longitude,
+                    cities[randomIndex].latitude,
+                ] 
             },
             images: [
                 {
