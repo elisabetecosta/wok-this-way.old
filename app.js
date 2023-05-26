@@ -33,8 +33,8 @@ const reviewRoutes = require('./routes/reviews')
 
 const MongoStore = require('connect-mongo')
 
-const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB}.mongodb.net` || 'mongodb://localhost:27017/wok-this-way'
 
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/wok-this-way'
 
 // Connects to mongo database
 mongoose.connect(dbUrl, {
@@ -94,7 +94,7 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        secure: true, // for when the site is live
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
@@ -205,19 +205,6 @@ app.use('/buffets/:id/reviews', reviewRoutes)
 
 
 // Defines routes for the application
-
-// TODO delete this route before deployment
-app.get('/fakeUser', async (req, res) => {
-    const user = new User({
-        email:'123@gmail.com',
-        username: 'admin'
-    })
-
-    const newUser = await User.register(user, 'password')
-
-    res.send(newUser)
-})
-
 
 // Handles GET request for the root route ('/')
 app.get('/', (req, res) => {
