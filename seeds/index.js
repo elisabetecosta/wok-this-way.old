@@ -33,7 +33,7 @@ const seedDB = async () => {
 
     for (let i = 0; i < 15; i++) {
 
-        const randomIndex = Math.floor(Math.random() * 5)
+        const randomIndex = Math.floor(Math.random() * 8)
 
         const price = Math.floor(Math.random() * 5)
 
@@ -52,12 +52,8 @@ const seedDB = async () => {
             },
             images: [
                 {
-                    url: 'https://res.cloudinary.com/dh9isfyyf/image/upload/v1684707965/Wok%20This%20Way/heuwjggiflu9angrleia.png',
-                    filename: 'Wok This Way/heuwjggiflu9angrleia'    
-                },
-                {
-                    url: 'https://res.cloudinary.com/dh9isfyyf/image/upload/v1684707966/Wok%20This%20Way/dn8xmqytxxth1nw10ojs.png',
-                    filename: 'Wok This Way/dn8xmqytxxth1nw10ojs'    
+                    url: 'https://res.cloudinary.com/dh9isfyyf/image/upload/v1685032691/Wok%20This%20Way%20-%20Default%20Images/wok.cover_ucisey.jpg',
+                    filename: 'Wok This Way - Default Images/wok.cover_ucisey'    
                 }
             ]
         })

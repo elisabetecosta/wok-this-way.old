@@ -33,6 +33,7 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createBuffet = async (req, res) => {
 
+    // TODO address error handling in case the address is invalid
     const geoData = await geocoder.geocode(req.body.buffet.location)
 
     const latitude = geoData[0].latitude

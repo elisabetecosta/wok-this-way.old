@@ -1,4 +1,4 @@
-// TODO Add comments where needed and icon to the left of the map popup title in the virtual to make it more obvious the title is a link
+// TODO Add comments where needed and icon to the left of the map popup title in the virtual to make it more obvious the title is a link, add location to pop up?
 
 const mongoose = require('mongoose')
 const Review = require('./review')
