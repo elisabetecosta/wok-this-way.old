@@ -33,9 +33,7 @@ const reviewRoutes = require('./routes/reviews')
 
 const MongoStore = require('connect-mongo')
 
-//|| 'mongodb://localhost:27017/wok-this-way'
-
-const dbUrl = process.env.DB_URL 
+const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB}.mongodb.net` || 'mongodb://localhost:27017/wok-this-way'
 
 
 // Connects to mongo database
