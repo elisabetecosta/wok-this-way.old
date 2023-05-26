@@ -31,10 +31,13 @@ const userRoutes = require('./routes/users')
 const buffetRoutes = require('./routes/buffets')
 const reviewRoutes = require('./routes/reviews')
 
+const MongoStore = require('connect-mongo')
+
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/wok-this-way'
 
 
 // Connects to mongo database
-mongoose.connect('mongodb://localhost:27017/chineseBuffetsDB', {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -70,18 +73,30 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize())
 
 
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!'
+
+// MongoStore config
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 60 * 60
+})
+
+store.on('error', (e) => console.log('SESSION STORE ERROR', e))
+
+
 // Configures session middleware
 const sessionConfig = {
+    store,
     name: 'session',
-    secret: 'thisshouldbeabettersecret!',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        // secure: true, //uncomment after deployment
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        // sameSite: 'None',
-        // secure: true, //uncomment after deployment
     }
 }
 
@@ -234,6 +249,7 @@ app.use((err, req, res, next) => {
 })
 
 
+const PORT = process.env.PORT || 3000
 
 // Starts the server listening on port 3000
-app.listen(3000, () => console.log('Server started on port 3000'))
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
