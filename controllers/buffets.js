@@ -1,6 +1,6 @@
 // TODO add missing comments
 const Buffet = require('../models/buffet')
-const { cloudinary } = require('../CloudinaryConfig')
+const { cloudinary } = require('../config/Cloudinary')
 
 
 const NodeGeocoder = require('node-geocoder')

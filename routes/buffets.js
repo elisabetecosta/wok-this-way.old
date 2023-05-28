@@ -1,8 +1,8 @@
 // Imports required modules
 const express = require('express')
 const router = express.Router()
-const multer  = require('multer')
-const { storage } = require('../CloudinaryConfig')
+const multer = require('multer')
+const { storage } = require('../config/Cloudinary')
 const upload = multer({ storage })
 
 const buffets = require('../controllers/buffets')

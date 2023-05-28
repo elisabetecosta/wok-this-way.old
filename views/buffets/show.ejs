@@ -113,7 +113,11 @@
                     <button class="btn btn-success">Submit</button>
 
                 </form>
+
+                <% } else { %>
+                    <a href="/login?returnTo=/buffets/<%= buffet._id %>" class="btn btn-lg btn-primary mb-3">Leave a Review</a>
                 <% } %>
+
 
                     <% buffet.reviews.forEach((review)=> { %>
 
