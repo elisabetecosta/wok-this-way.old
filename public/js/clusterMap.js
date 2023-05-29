@@ -1,11 +1,9 @@
-// TODO find out how to make mapbox cluster map load faster, review comments and change as needed
-
 mapboxgl.accessToken = mapboxToken
 
 const map = new mapboxgl.Map({
     container: 'clusterMap',
     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    style: 'mapbox://styles/mapbox/light-v10',
+    style: 'mapbox://styles/mapbox/light-v10?optimize=true',
     center: [8.151, 28.580],
     zoom: 1.5
 })

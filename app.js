@@ -1,5 +1,3 @@
-// TODO substitude all require for import and add  "type": "module", to the package.json
-
 // Enables strict mode
 'use strict'
 

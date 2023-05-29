@@ -1,3 +1,5 @@
+// TODO: add comments
+
 const User = require('../models/user')
 
 module.exports.renderRegisterForm = (req, res) => {
