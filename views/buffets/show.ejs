@@ -110,12 +110,14 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-success">Submit</button>
+                    <button class="btn btn-success mb-5">Submit</button>
 
                 </form>
 
                 <% } else { %>
-                    <a href="/login?returnTo=/buffets/<%= buffet._id %>" class="btn btn-lg btn-primary mb-3">Leave a Review</a>
+                    <div class="text-center">
+                        <a href="/login?returnTo=/buffets/<%= buffet._id %>" class="btn btn-lg btn-primary mb-5">Leave a Review</a>
+                    </div>
                 <% } %>
 
 
