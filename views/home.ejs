@@ -1,4 +1,3 @@
-<!-- TODO: make navbar more similar to partials/navbar with register/login separated from other links -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,16 +21,14 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header class="mb-auto">
             <div>
-                <h3 class="float-md-start mb-0">Wok This Way</h3>
-                <nav class="nav nav-masthead justify-content-center float-md-end">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    <a class="nav-link" href="/buffets">Buffets</a>
+                <h3 class="float-md-start mb-0"><a class="brand" href="/">Wok This Way</a></h3>
+                <nav class="navbar nav-masthead justify-content-center float-md-end">
                     <% if(!currentUser) { %>
                         <a class="nav-link" href="/login">Login</a>
                         <a class="nav-link" href="/register">Register</a>
-                        <% } else { %>
-                            <a class="nav-link" href="/logout">Logout</a>
-                            <% } %>
+                    <% } else { %>
+                        <a class="nav-link" href="/logout">Logout</a>
+                    <% } %>
                 </nav>
             </div>
         </header>

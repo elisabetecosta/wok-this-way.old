@@ -12,6 +12,15 @@ body {
     max-width: 60vw;
 }
 
+.brand {
+    color: white;
+    text-decoration: none;
+}
+
+.brand:hover {
+    color: white;
+}
+
 .nav-link {
     padding: 0.25rem 0;
     font-weight: 700;
