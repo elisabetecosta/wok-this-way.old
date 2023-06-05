@@ -1,5 +1,3 @@
-// TODO Add comments where needed and icon to the left of the map popup title in the virtual to make it more obvious the title is a link, add location to pop up?
-
 const mongoose = require('mongoose')
 const Review = require('./review')
 const Schema = mongoose.Schema
@@ -9,11 +7,15 @@ const ImageSchema = new Schema({
     filename: String
 })
 
+// Generates a thumbnail URL by replacing the '/upload' segment of the original URL
 ImageSchema.virtual('thumbnail').get(function () {
+
+    // Returns a smaller version of the image (150x200px)
     return this.url.replace('/upload', '/upload/c_fill,h_150,w_200')
 })
 
 
+// Options object to enable virtuals in toJSON
 const opts = { toJSON: { virtuals: true } }
 
 const BuffetSchema = new Schema({
@@ -43,14 +45,16 @@ const BuffetSchema = new Schema({
             ref: 'Review'
         }
     ]
-}, opts)
+}, opts) // Applies the options to enable virtuals in toJSON
 
 
 // Virtual needed to send buffet data to the cluster map popup
 BuffetSchema.virtual('properties.popUpMarkup').get(function () {
     return `
-    <a class="mapTitle" href="/buffets/${this._id}">${this.title}</a>
+    <p class="mapTitle">${this.title}</p>
+    <p class="mapLocation">${this.location}</p>
     <p>${this.description.substring(0, 100)}...</p>
+    <p><a class="mapLink" href="/buffets/${this._id}">View Buffet</a></p>
     `
 })
 

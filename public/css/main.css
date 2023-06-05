@@ -15,11 +15,21 @@
 
 .mapTitle {
     color: #AF7AC5;
-    text-decoration: none;
     font-size: 1rem;
     font-weight: bold;
 }
 
-.mapTitle:hover {
+.mapLocation {
+    color: rgb(177, 177, 177);
+}
+
+.mapLink {
+    text-decoration: none;
+    color: #AF7AC5;
+    font-weight: bold;
+}
+
+.mapLink:hover {
+    text-decoration: underline;
     cursor: pointer;
 }
