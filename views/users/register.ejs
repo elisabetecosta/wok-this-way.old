@@ -1,4 +1,3 @@
-<!-- TODO: add bootstrap invalid feedback to the form fiels that gives different messages depending if the field is empty, invalid, password is not strong enough, etc (maybe use existing ExpressError middleware to make this faster)  -->
 <%- layout('layouts/boilerplate') -%>
 
 <h1 class="text-center mb-3">Register</h1>
@@ -10,16 +9,19 @@
         <div class="mb-3">
             <label class="form-label" for="username">Username</label>
             <input class="form-control" type="text" id="username" name="username" required>
+            <div class="invalid-feedback">Invalid Username!</div>
         </div>
     
         <div class="mb-3">
             <label class="form-label" for="email">Email</label>
             <input class="form-control" type="email" id="email" name="email" required>
+            <div id="invalidEmailMsg" class="invalid-feedback">Invalid Email!</div>
         </div>
     
         <div class="mb-3">
             <label class="form-label" for="password">Password</label>
             <input class="form-control" type="password" id="password" name="password" required>
+            <div id="invalidPassMsg" class="invalid-feedback">Invalid Password!</div>
         </div>
     
         <button class="btn btn-success">Register</button>
