@@ -31,7 +31,7 @@ const reviewRoutes = require('./routes/reviews')
 const MongoStore = require('connect-mongo')
 
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/wok-this-way'
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/wok-this-way'
 
 // Connects to mongo database
 mongoose.connect(dbUrl, {

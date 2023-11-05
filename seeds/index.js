@@ -10,7 +10,7 @@ const Buffet = require('../models/buffet')
 
 
 // Connects to mongo database
-mongoose.connect('mongodb://localhost:27017/wok-this-way', {
+mongoose.connect('mongodb://127.0.0.1:27017/wok-this-way', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
